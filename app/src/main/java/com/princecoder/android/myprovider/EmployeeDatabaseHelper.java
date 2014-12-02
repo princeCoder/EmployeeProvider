@@ -9,10 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class EmployeeDatabaseHelper extends SQLiteOpenHelper {
 
-    static final String DATABASE_NAME = "Company";
-    static final String EMPLOYEE_TABLE_NAME = "employee";
-    static final int DATABASE_VERSION = 1;
-    static final String CREATE_DB_TABLE =
+    public static final String DATABASE_NAME = "Company";
+    public static final String EMPLOYEE_TABLE_NAME = "employee";
+    public static final int DATABASE_VERSION = 1;
+    public static final String CREATE_DB_TABLE =
             " CREATE TABLE " + EMPLOYEE_TABLE_NAME +
                     " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     " name TEXT NOT NULL, " +

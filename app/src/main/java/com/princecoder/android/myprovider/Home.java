@@ -2,11 +2,9 @@ package com.princecoder.android.myprovider;
 
 import android.annotation.TargetApi;
 import android.app.LoaderManager;
-import android.content.ContentValues;
-import android.content.CursorLoader;
+import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,9 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.princecoder.android.myprovider.Adapters.EmployeeCursorAdapter;
+import com.princecoder.android.myprovider.Presenter.EmployeePresenter;
 
 /**
  * @author prinzlyngotoum
@@ -30,14 +28,23 @@ import com.princecoder.android.myprovider.Adapters.EmployeeCursorAdapter;
  */
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class Home extends ActionBarActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class Home extends ActionBarActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>, IHome {
 
 
-    ListView mListview;
-    Button mBtnAdd;
-    EditText mEdtName;
-    EditText mEdtPosition;
-    EmployeeCursorAdapter mAdapter;
+    //Ui elements
+    private ListView mListview;
+    private Button mBtnAdd;
+    private EditText mEdtName;
+    private EditText mEdtPosition;
+
+    //Adapter
+    private EmployeeCursorAdapter mAdapter;
+
+    //Presenter of the Application
+    private EmployeePresenter mEmployeePresenter;
+
+    //Context of the Application
+    private Context mContext;
 
     //Loaders
     private final int mLoader = 1;
@@ -47,52 +54,39 @@ public class Home extends ActionBarActivity implements View.OnClickListener, Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mListview = (ListView) findViewById(R.id.listviewItem);
-        mEdtName = (EditText) findViewById(R.id.txtName);
-        mEdtPosition = (EditText) findViewById(R.id.txtTitle);
-        mBtnAdd = (Button) findViewById(R.id.btnAdd);
-        mBtnAdd.setOnClickListener(this);
+        //Initialize the presenter
+        mEmployeePresenter = new EmployeePresenter(this);
 
-        mAdapter = new EmployeeCursorAdapter(getApplicationContext(), null, 0);
+        //Initialize the context;
+        mContext = MyProvider.getInstance().getApplicationContext();
+
+        //get UI elements
+        getUiElements();
+
+        //Initialize the adapter
+        mAdapter = new EmployeeCursorAdapter(mContext, null, 0);
 
         //Initialize loader
         getLoaderManager().initLoader(mLoader, null, this);
     }
 
+    //get UI elements
+    private void getUiElements() {
+        mListview = (ListView) findViewById(R.id.listviewItem);
+        mEdtName = (EditText) findViewById(R.id.txtName);
+        mEdtPosition = (EditText) findViewById(R.id.txtTitle);
+        mBtnAdd = (Button) findViewById(R.id.btnAdd);
+        mBtnAdd.setOnClickListener(this);
+    }
+
     @Override
     public void onClick(View v) {
-
-        // Add an Employee
-        ContentValues values = new ContentValues();
-
-        values.put(EmployeeProvider.NAME,
-                ((EditText) findViewById(R.id.txtName)).getText().toString());
-
-        values.put(EmployeeProvider.POSITION,
-                ((EditText) findViewById(R.id.txtTitle)).getText().toString());
-        getContentResolver().insert(
-                EmployeeProvider.CONTENT_URI, values);
-
-        // Notify the user that the data has been added
-        Toast.makeText(getBaseContext(),
-                "New Employee added !!!", Toast.LENGTH_LONG).show();
-
-        // reset the fields
-
-        mEdtPosition.setText("");
-        mEdtName.setText("");
+        mEmployeePresenter.addEmployee(getEdtName().getText().toString(), getEdtPosition().getText().toString());
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String URL = EmployeeProvider.URL;
-        Uri EmployeeURI = Uri.parse(URL);
-        return new CursorLoader(
-                this,
-                EmployeeURI,
-                null,
-                null, null, EmployeeProvider.NAME
-        );
+        return mEmployeePresenter.getEmployeeCursor();
     }
 
     @Override
@@ -104,5 +98,30 @@ public class Home extends ActionBarActivity implements View.OnClickListener, Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+
+    // Getters
+    public EditText getEdtPosition() {
+        return mEdtPosition;
+    }
+
+    public ListView getListview() {
+        return mListview;
+    }
+
+    public EditText getEdtName() {
+        return mEdtName;
+    }
+
+
+    @Override
+    public void setEdtPosition(String value) {
+        this.mEdtPosition.setText(value);
+    }
+
+    @Override
+    public void setEdtName(String value) {
+        this.mEdtName.setText(value);
     }
 }

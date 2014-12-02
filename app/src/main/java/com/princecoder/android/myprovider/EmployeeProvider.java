@@ -19,6 +19,8 @@ import java.util.HashMap;
  */
 public class EmployeeProvider extends ContentProvider {
 
+    private Context mContext;
+
     public static final String PROVIDER_NAME = "com.princecoder.android.myprovider";
     public static final String URL = "content://" + PROVIDER_NAME + "/employee";
     public static final Uri CONTENT_URI = Uri.parse(URL);
@@ -30,10 +32,10 @@ public class EmployeeProvider extends ContentProvider {
 
     private static HashMap<String, String> mMapProjection;
 
-    static final int EMPLOYEE = 1;
-    static final int EMPLOYEE_ID = 2;
+    private static final int EMPLOYEE = 1;
+    private static final int EMPLOYEE_ID = 2;
 
-    static final UriMatcher uriMatcher;
+    private static final UriMatcher uriMatcher;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -49,8 +51,8 @@ public class EmployeeProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        Context context = getContext();
-        EmployeeDatabaseHelper dbHelper = new EmployeeDatabaseHelper(context);
+        mContext = MyProvider.getInstance().getApplicationContext();
+        EmployeeDatabaseHelper dbHelper = new EmployeeDatabaseHelper(mContext);
         /**
          * Create a write able database which will trigger its
          * creation if it doesn't already exist.
@@ -85,7 +87,7 @@ public class EmployeeProvider extends ContentProvider {
         /**
          * register to watch a content URI for changes
          */
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+        c.setNotificationUri(mContext.getContentResolver(), uri);
 
         return c;
     }
@@ -119,7 +121,7 @@ public class EmployeeProvider extends ContentProvider {
          */
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-            getContext().getContentResolver().notifyChange(_uri, null);
+            mContext.getContentResolver().notifyChange(_uri, null);
             return _uri;
         }
         throw new SQLException("Failed to add a record into " + uri);
@@ -143,7 +145,7 @@ public class EmployeeProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        mContext.getContentResolver().notifyChange(uri, null);
         return count;
     }
 
@@ -165,7 +167,7 @@ public class EmployeeProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
-        getContext().getContentResolver().notifyChange(uri, null);
+        mContext.getContentResolver().notifyChange(uri, null);
         return count;
     }
 }
