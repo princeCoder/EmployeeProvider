@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -28,7 +27,7 @@ import com.princecoder.android.myprovider.Presenter.EmployeePresenter;
  */
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class Home extends ActionBarActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>, IHome {
+public class HomeActivity extends ActionBarActivity implements android.view.View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>, IView {
 
 
     //Ui elements
@@ -79,7 +78,7 @@ public class Home extends ActionBarActivity implements View.OnClickListener, Loa
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(android.view.View v) {
         mEmployeePresenter.addEmployee(getEdtName().getText().toString(), getEdtPosition().getText().toString());
     }
 
