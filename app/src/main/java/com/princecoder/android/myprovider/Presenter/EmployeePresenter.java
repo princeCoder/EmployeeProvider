@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.princecoder.android.myprovider.EmployeeProvider;
 import com.princecoder.android.myprovider.IHome;
-import com.princecoder.android.myprovider.MyProvider;
 
 /**
  * Created by prinzlyngotoum on 12/2/14.
@@ -20,9 +19,9 @@ public class EmployeePresenter implements IEmployeePresenter {
   public IHome mHome;
   Context mContext;
 
-  public EmployeePresenter(IHome home){
+  public EmployeePresenter(IHome home, Context c){
       this.mHome=home;
-      this.mContext=MyProvider.getInstance().getApplicationContext();
+      this.mContext=c;
   }
 
     @Override

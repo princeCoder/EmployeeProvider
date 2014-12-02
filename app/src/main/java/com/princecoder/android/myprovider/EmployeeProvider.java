@@ -51,7 +51,7 @@ public class EmployeeProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mContext = MyProvider.getInstance().getApplicationContext();
+        mContext = getContext();
         EmployeeDatabaseHelper dbHelper = new EmployeeDatabaseHelper(mContext);
         /**
          * Create a write able database which will trigger its

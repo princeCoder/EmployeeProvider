@@ -54,11 +54,10 @@ public class Home extends ActionBarActivity implements View.OnClickListener, Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //Initialize the presenter
-        mEmployeePresenter = new EmployeePresenter(this);
+        mContext=getApplicationContext();
 
-        //Initialize the context;
-        mContext = MyProvider.getInstance().getApplicationContext();
+        //Initialize the presenter
+        mEmployeePresenter = new EmployeePresenter(this,mContext);
 
         //get UI elements
         getUiElements();
