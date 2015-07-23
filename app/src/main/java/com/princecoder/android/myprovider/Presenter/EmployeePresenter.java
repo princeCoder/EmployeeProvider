@@ -8,12 +8,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.widget.Toast;
 
-import com.princecoder.android.myprovider.EmployeeProvider;
 import com.princecoder.android.myprovider.IView;
+import com.princecoder.android.myprovider.data.EmployeeContract;
 
-/**
- * Created by prinzlyngotoum on 12/2/14.
- */
 public class EmployeePresenter implements IEmployeePresenter {
 
   public IView mHome;
@@ -26,16 +23,15 @@ public class EmployeePresenter implements IEmployeePresenter {
 
     @Override
     public void addEmployee(String name, String title) {
-
         // Add an Employee
         ContentValues values = new ContentValues();
 
-        values.put(EmployeeProvider.NAME,
+        values.put(EmployeeContract.EmployeeEntry.COLUMN_NAME,
                 name);
-        values.put(EmployeeProvider.POSITION,title);
+        values.put(EmployeeContract.EmployeeEntry.COLUMN_TITLE, title);
 
         mContext.getContentResolver().insert(
-                EmployeeProvider.CONTENT_URI, values);
+                EmployeeContract.EmployeeEntry.CONTENT_URI, values);
 
         // Notify the user that the data has been added
         Toast.makeText(mContext,
@@ -52,13 +48,13 @@ public class EmployeePresenter implements IEmployeePresenter {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public CursorLoader getEmployeeCursor(){
-        String URL = EmployeeProvider.URL;
-        Uri EmployeeURI = Uri.parse(URL);
+        //String URL = EmployeeProvider.URL;
+        Uri EmployeeURI = EmployeeContract.EmployeeEntry.CONTENT_URI;
         return new CursorLoader(
                 mContext,
                 EmployeeURI,
                 null,
-                null, null, EmployeeProvider.NAME
+                null, null, EmployeeContract.EmployeeEntry.COLUMN_NAME
         );
     }
 }

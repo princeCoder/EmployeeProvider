@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.princecoder.android.myprovider.EmployeeProvider;
 import com.princecoder.android.myprovider.R;
+import com.princecoder.android.myprovider.data.EmployeeContract;
 
-/**
- * Created by prinzlyngotoum on 12/1/14.
- */
+
 public class EmployeeCursorAdapter extends CursorAdapter {
 
     private LayoutInflater mInflater;
@@ -43,6 +41,8 @@ public class EmployeeCursorAdapter extends CursorAdapter {
                 (R.layout.contacts_list_item, null);
 
         ViewHolder holder = new ViewHolder(view, cursor);
+        // Save data for each single view element
+
 
         view.setTag(holder);
         return view;
@@ -65,26 +65,25 @@ class ViewHolder {
 
         this.mName = (TextView) view.findViewById(R.id.employee_name);
         this.mPosition = (TextView) view.findViewById(R.id.employee_position);
-        this.mNameIndex = cursor.getColumnIndex(EmployeeProvider.NAME);
-        this.mPositionIndex = cursor.getColumnIndex(EmployeeProvider.POSITION);
+        this.mNameIndex = cursor.getColumnIndex(EmployeeContract.EmployeeEntry.COLUMN_NAME);
+        this.mPositionIndex = cursor.getColumnIndex(EmployeeContract.EmployeeEntry.COLUMN_TITLE);
 
     }
 
-    public void setPosition(String position) {
-        this.mPosition.setText(position);
+    public TextView getName() {
+        return mName;
     }
 
     public void setName(String name) {
         this.mName.setText(name);
     }
 
-
-    public TextView getName() {
-        return mName;
-    }
-
     public TextView getPosition() {
         return mPosition;
+    }
+
+    public void setPosition(String position) {
+        this.mPosition.setText(position);
     }
 
     public int getNameIndex() {

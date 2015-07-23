@@ -30,23 +30,19 @@ import com.princecoder.android.myprovider.Presenter.EmployeePresenter;
 public class HomeActivity extends ActionBarActivity implements android.view.View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>, IView {
 
 
+    //Loaders
+    private final int mLoader = 1;
     //Ui elements
     private ListView mListview;
     private Button mBtnAdd;
     private EditText mEdtName;
     private EditText mEdtPosition;
-
     //Adapter
     private EmployeeCursorAdapter mAdapter;
-
     //Presenter of the Application
     private EmployeePresenter mEmployeePresenter;
-
     //Context of the Application
-    private Context mContext;
-
-    //Loaders
-    private final int mLoader = 1;
+    private Context mContext; //set
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,18 +100,17 @@ public class HomeActivity extends ActionBarActivity implements android.view.View
         return mEdtPosition;
     }
 
+    @Override
+    public void setEdtPosition(String value) {
+        this.mEdtPosition.setText(value);
+    }
+
     public ListView getListview() {
         return mListview;
     }
 
     public EditText getEdtName() {
         return mEdtName;
-    }
-
-
-    @Override
-    public void setEdtPosition(String value) {
-        this.mEdtPosition.setText(value);
     }
 
     @Override
